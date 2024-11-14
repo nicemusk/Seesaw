@@ -13,9 +13,8 @@ public class csArduinoInput : MonoBehaviour
     [SerializeField] public string realData;
 
     public Animator seesawAnimator;
-    public GameObject seesawObject;
-
-    private const int totalFrames = 29; // 애니메이션의 총 프레임 수를 29로 고정
+    
+    private const int totalFrames = 80; // 애니메이션의 총 프레임 수를 80으로 고정
     private const float maxSerialValue = 75f; // 시리얼 값의 최대/최소 값 설정
 
     public float serialPower = 1f;
@@ -104,7 +103,7 @@ public class csArduinoInput : MonoBehaviour
             HandleLoopAnimation();
         }
 
-        // 애니메이션 및 오브젝트 회전 처리
+        // 애니메이션 처리
         ProcessAnimation();
     }
 
@@ -117,8 +116,8 @@ public class csArduinoInput : MonoBehaviour
         float serialValue;
         if (float.TryParse(realData, out serialValue))
         {
-            // 시리얼 값을 -75에서 75로 고정
-            serialValue = Mathf.Clamp(serialValue * serialPower, -maxSerialValue, maxSerialValue);
+            // 시리얼 값을 -1에서 1로 고정
+            serialValue = Mathf.Clamp(serialValue * serialPower / maxSerialValue, -1.5f, 1.5f);
             currentSerialValue = Mathf.Lerp(currentSerialValue, serialValue, Time.deltaTime * smoothingFactor);
         }
     }
@@ -156,20 +155,18 @@ public class csArduinoInput : MonoBehaviour
         }
     }
 
-    // 애니메이션과 오브젝트 회전 처리 함수
+    // 애니메이션 처리 함수
     private void ProcessAnimation()
     {
-        // currentSerialValue의 절대값을 0~1 범위로 매핑하여 애니메이션 프레임 수에 맞춤
-        float normalizedTime = Mathf.Abs(currentSerialValue) / maxSerialValue; 
-
-        if (currentSerialValue < 0)
+        // currentSerialValue가 양수일 때는 0~40프레임, 음수일 때는 40~80프레임으로 매핑
+        float normalizedTime;
+        if (currentSerialValue >= 0)
         {
-            // 시소 오브젝트를 좌우 회전시킬 필요 없이 애니메이션은 똑같이 재생
-            seesawObject.transform.rotation = Quaternion.Euler(0f, 180f, 0f); // 왼쪽 방향
+            normalizedTime = (currentSerialValue / 1f) * 0.5f; // 0에서 1은 0~40프레임
         }
         else
         {
-            seesawObject.transform.rotation = Quaternion.Euler(0f, 0f, 0f); // 오른쪽 방향
+            normalizedTime = 0.5f + (Mathf.Abs(currentSerialValue) / 1f) * 0.5f; // -1에서 0은 40~80프레임
         }
 
         // 애니메이션의 특정 프레임에 맞추어 재생
