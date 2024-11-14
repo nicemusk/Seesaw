@@ -122,22 +122,22 @@ public class csArduinoInput : MonoBehaviour
         }
     }
 
-    // 키보드 입력 처리 함수
-    private void HandleKeyboardInput()
+private void HandleKeyboardInput()
+{
+    float keyboardInput = Input.GetAxisRaw("Horizontal"); // -1 (왼쪽) ~ 1 (오른쪽)
+
+    if (keyboardInput != 0)
     {
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            currentSerialValue = Mathf.Lerp(currentSerialValue, -maxKeyboardValue, Time.deltaTime * keyboardSpeed);
-        }
-        else if (Input.GetKey(KeyCode.RightArrow))
-        {
-            currentSerialValue = Mathf.Lerp(currentSerialValue, maxKeyboardValue, Time.deltaTime * keyboardSpeed);
-        }
-        else
-        {
-            currentSerialValue = Mathf.Lerp(currentSerialValue, 0f, Time.deltaTime * keyboardSpeed);
-        }
+        currentSerialValue = keyboardInput * maxKeyboardValue; // -1 또는 1로 고정
     }
+    else
+    {
+        // 키 입력이 없으면 서서히 0으로 복귀
+        currentSerialValue = Mathf.Lerp(currentSerialValue, 0f, Time.deltaTime * keyboardSpeed);
+    }
+}
+
+
 
     // 루프 애니메이션 처리 함수
     private void HandleLoopAnimation()
