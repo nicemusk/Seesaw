@@ -769,12 +769,12 @@ MonoBehaviour:
   realData: 
   seesawAnimator: {fileID: 1363689952}
   serialPower: 1
-  smoothingFactor: 12
-  keyboardSpeed: 4
-  maxKeyboardValue: 75
+  smoothingFactor: 11
+  keyboardSpeed: 2
+  maxKeyboardValue: 1
   Loop: 0
   loopSpeed: 1
-  UseArduino: 1
+  UseArduino: 0
 --- !u!4 &1528439540
 Transform:
   m_ObjectHideFlags: 0

@@ -22,8 +22,8 @@ public class csArduinoInput : MonoBehaviour
     public float smoothingFactor = 5f;
 
     // 키보드 입력 관련 변수
-    public float keyboardSpeed = 50f;
-    public float maxKeyboardValue = 75f;
+    public float keyboardSpeed = 5f; // 키보드 입력 속도
+    public float maxKeyboardValue = 1f; // 키보드 입력값을 -1에서 1 사이로 제한
 
     // 루프 애니메이션 제어 변수
     public bool Loop = false; // 애니메이션 자동 루프 여부
@@ -117,7 +117,7 @@ public class csArduinoInput : MonoBehaviour
         if (float.TryParse(realData, out serialValue))
         {
             // 시리얼 값을 -1에서 1로 고정
-            serialValue = Mathf.Clamp(serialValue * serialPower / maxSerialValue, -1.5f, 1.5f);
+            serialValue = Mathf.Clamp(serialValue * serialPower / maxSerialValue, -1f, 1f);
             currentSerialValue = Mathf.Lerp(currentSerialValue, serialValue, Time.deltaTime * smoothingFactor);
         }
     }
